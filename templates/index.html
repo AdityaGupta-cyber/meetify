@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetify! -One assure</title>
+    <style>
+        body{
+            overflow-x: scroll ;
+        }
+        .container{
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .sub-content{
+            display: flex;
+            padding: 5px;
+            justify-content: center;
+            flex-direction: column;
+            width: 70vh;
+            border: 1px solid red;
+            margin: 2px;
+        }
+        .green{
+            color: green;
+        }
+        .info{
+            margin-left: 2rem;
+        }
+        .red{
+            margin-left: 2px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+<h1 style="font-size: bold;">Meetify</h1>
+<h3>- Meetify API docs - </h3>
+<div class="content">
+  <div class="sub-content">
+    <h4>
+        <span>1. Create User</span>
+        <span class="green"> -> POST- method</span>
+    </h4>
+    <h6 class="info"> Format - <br> {
+        <br>
+        "name" : "John Doe",
+        <br>
+        "email" : "john@gmail.com",
+        <br>
+        "dnd_start_time" : "2024-06-20T03:49:43+0000",
+        <br>
+        "dnd_end_time" : "2024-06-20T03:49:43+0000",
+        <br>
+        "preferred_timezone" : "IST"
+        <br>
+    }</h6>
+  </div>
+  <div class="sub-content">
+    <h4>
+        <span>2. Update User</span>
+        <span class="green"> -> PUT- method</span>
+    </h4>
+    <h6 class="info"> Format - <br> {
+        <br>
+        "dnd_start_time" : "2024-06-20T03:49:43+0000",
+        <br>
+        "dnd_end_time" : "2024-06-20T03:49:43+0000",
+        <br>
+        "preferred_timezone" : "IST"
+        <br>
+    }</h6>
+  </div>
+  <div class="sub-content">
+    <h4>
+        <span>3. Create Meeting</span>
+        <span class="green"> -> POST- method</span>
+    </h4>
+    <h6 class="info"> Format - <br> {
+        <br>
+        "user_id" : 130,
+        <br>
+        "meeting_type" : "online" | "offline",
+        <br>
+        "start_time" : "2024-06-20T03:49:43+0000",
+        <br>
+        "end_time" : "2024-06-20T03:49:43+0000",
+        <br>
+        "timezone" : "IST",
+        <br>
+        "notification_interval" : "0 10 * * *"
+        <br>
+    }
+</h6>
+  </div>
+  <div class="sub-content">
+    <h4>
+        <span>4. Get Meetings</span>
+        <span class="green"> -> POST- method</span>
+        <br>
+        <span class="red">Use Post Method </span>
+    </h4>
+    <h6 class="info"> Format - <br> {
+
+        <br>
+        "start_time" : "2024-06-20T03:49:43+0000",
+        <br>
+        "end_time" : "2024-06-20T03:49:43+0000",
+        <br>
+
+    }
+</h6>
+  </div>
+</div>
+    </div>
+</body>
+</html>
