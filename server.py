@@ -40,23 +40,36 @@ class Meetings(db.Model):
 
 def notify_user(user, meeting): #this func will check if the user is inthe dnd mode and if he is not then it will send a notification
     print("user notification!")
-    now = datetime.now(pytz.timezone(user.preferred_timezone))
+    user_tmz = user.preferred_timezone
+    print(user_tmz)
+    if user_tmz.lower() == 'ist':
+        now = datetime.now(pytz.timezone("Asia/Kolkata"))
+    else:
+         now = datetime.now(pytz.timezone(user.preferred_timezone))
     if user.dnd_start_time and user.dnd_end_time:
-        dnd_start = user.dnd_start_time.astimezone(pytz.timezone(user.preferred_timezone))
-        dnd_end = user.dnd_end_time.astimezone(pytz.timezone(user.preferred_timezone))
+        if user.preferred_timezone.lower() == 'ist':
+            print("Create")
+            dnd_start = user.dnd_start_time.astimezone(pytz.timezone("Asia/Kolkata"))
+            dnd_end = user.dnd_end_time.astimezone(pytz.timezone("Asia/Kolkata"))
+        else:
+            dnd_start = user.dnd_start_time.astimezone(pytz.timezone(user.preferred_timezone))
+            dnd_end = user.dnd_end_time.astimezone(pytz.timezone(user.preferred_timezone))
         if dnd_start <= now <= dnd_end:
             return
 
-    
-    requests.post('https://webhook.site', data={
-        'user': user.email,
-        'meeting': meeting.id,
-        'meeting_type':meeting.meeting_type,
-        'timezone':meeting.timezone,
-        'start_time':meeting.start_time,
-        'end_time':meeting.end_time,
-        'message': 'You have a meeting scheduled.'
-    })
+    print("requesting webhook")
+    # try:
+    #     requests.post('https://webhook.site', json={
+    #     'user': user.email,
+    #     'meeting': meeting.id,
+    #     'meeting_type':meeting.meeting_type,
+    #     'timezone':meeting.timezone,
+    #     'start_time':meeting.start_time,
+    #     'end_time':meeting.end_time,
+    #     'message': 'You have a meeting scheduled.'
+    # })
+    # except ValueError as e:
+    #      jsonify({"error":f"Please check the error {e} and try again! "})
 
 def cron_parser(cron_expression):
     cron_parts = cron_expression.split()
@@ -76,16 +89,18 @@ def cron_parser(cron_expression):
 def scheduler_notification():
      with app.app_context():
           meetings = Meetings.query.all()
-
+        
           for meeting in meetings:
+               
                user = Users.query.get(meeting.user_id)
                cron_args = cron_parser(meeting.notification_interval)
-               scheduler.add_job(
+            #    print(cron_args)
+               print(scheduler.add_job(
                 notify_user,
                 'cron',
-                [user,meeting],
+                args=[user,meeting],
                **cron_args
-               )
+               ))
 
 #Our Routes to server the requests
 @app.route("/",methods=["GET"])
@@ -114,7 +129,12 @@ def create_user():
     try:
         # temp = Users.query.all()
         # print(temp[1].dnd_end_time)
-        user = Users(name = data['name'],email =data['email'],
+        check_usr = Users.query.filter_by(email=email).first()
+        print(check_usr)
+        if check_usr is not None:
+            return jsonify({"error":"User with email already exists!"})
+
+        user = Users(name = data['name'],email = data['email'],
         dnd_start_time = datetime.fromisoformat(data['dnd_start_time'] ),dnd_end_time = datetime.fromisoformat(data['dnd_end_time']),preferred_timezone = "IST")
         db.session.add(user)
         db.session.commit()
@@ -279,6 +299,14 @@ def time_slots(user_id):
         })
 
     return {"free_slots": free_slots,"booked_slots":booked_slots}
+
+
+
+# I am creating this for docker (as we need to initialise database and create tables in it before running)
+def create_tables():
+    with app.app_context():
+        db.create_all()
+
 if(__name__ == "__main__"):
     with app.app_context():
         db.create_all()
