@@ -1,4 +1,11 @@
-venv/
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.git
+.env
+*.db
 instance/
-__pycache__/
 migrations/
+venv/
+Procfile
