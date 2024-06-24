@@ -57,7 +57,9 @@ venv/Scripts/activate</code></pre>
         </li>
         <li><strong>Set up environment variables:</strong>
             <p>Create a <code>.env</code> file in the root directory and add your database URL or any other necessary environment variables:</p>
-            <pre><code>DATABASE_URL=sqlite:///site.db</code></pre>
+            <pre><code>DATABASE_URL=sqlite:///site.db</code>
+            <code>FLASK_APP=server.py</code>
+           <code>FLASK_DEBUG=1</code></pre>
         </li>
     </ol>
     <h2 id="configuration">Configuration</h2>
@@ -68,12 +70,7 @@ venv/Scripts/activate</code></pre>
     <h2 id="running-the-app">Running the App</h2>
     <h3>Local Development</h3>
     <ol>
-        <li><strong>Initialize the database:</strong>
-            <pre><code>flask db init
-flask db migrate
-flask db upgrade</code></pre>
-        </li>
-        <li><strong>Run the Flask application:</strong>
+         <li><strong>Run the Flask application:</strong>
             <pre><code>flask run</code></pre>
         </li>
     </ol>
