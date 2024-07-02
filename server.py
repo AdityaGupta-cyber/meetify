@@ -75,7 +75,10 @@ def update_user(user_id):
      dnd_end_time = data.get('dnd_end_time')
      preferred_timezone = data.get('preferred_timezone')
      print(dnd_end_time)
-
+    
+     if dnd_end_time<=dnd_start_time:
+         return jsonify({'error': 'Invalid time'}), 400
+     
      if preferred_timezone.lower()  == "ist":
           preferred_timezone = "Asia/Kolkata"
 
@@ -117,6 +120,11 @@ def create_meeting():
     end_time = data.get("end_time")
     timezone_str = data.get("timezone")
     notification_interval = data.get("notification_interval")
+
+    if start_time > end_time:
+        return jsonify({"error": "Invalid Time!"}), 400
+
+
 
     if not all([user_id, meeting_type, start_time, end_time, timezone_str, notification_interval]):
         return jsonify({"error": "Missing required fields!"}), 400
